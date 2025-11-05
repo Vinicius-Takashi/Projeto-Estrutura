@@ -1,20 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class LoginDialog extends JDialog {
 
     private GrafoSocial rede;
     private String resultadoAcao = "[Nenhuma ação realizada]";
+    private boolean abrirPainelPrincipal = false; // <- MENU decide se abre o painel
 
     public LoginDialog(JFrame owner, GrafoSocial rede) {
         super(owner, "Tela 1: Login / Seleção de Usuário", true);
         this.rede = rede;
 
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // ★ fecha só este diálogo
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(400, 250);
         setLayout(new GridLayout(4, 1, 10, 10));
-        setLocationRelativeTo(owner); // ★ centraliza no owner
+        setLocationRelativeTo(owner);
 
         add(new JLabel("Bem-vindo ao Simulador de Rede Social!", SwingConstants.CENTER));
 
@@ -34,12 +34,13 @@ public class LoginDialog extends JDialog {
     private void acaoAdicionarUsuario() {
         String nome = JOptionPane.showInputDialog(this, "Digite o nome do novo Usuário:");
         if (nome != null && !nome.trim().isEmpty()) {
-            rede.adicionarUsuario(nome.trim());
-            resultadoAcao = "[Ação]: Usuário '" + nome.trim() + "' adicionado ao grafo.";
-            chamarTelaOpcoes(nome.trim()); // abre menu e define resultado final
+            String n = nome.trim();
+            rede.adicionarUsuario(n);
+            resultadoAcao = "[Ação]: Usuário '" + n + "' adicionado ao grafo.";
+            chamarTelaOpcoes(n);
         } else {
             resultadoAcao = "[Ação Cancelada]";
-            dispose(); // fecha o login
+            dispose();
         }
     }
 
@@ -70,19 +71,26 @@ public class LoginDialog extends JDialog {
         }
     }
 
+    /** Abre o Menu (fica no loop lá dentro) e só então decide se abre o painel principal. */
     private void chamarTelaOpcoes(String usuario) {
-        dispose(); // fecha a tela de Login antes de abrir o menu
-
-        // IMPORTANTE: garanta que MenuOpcoesDialog é um JDialog modal
+        // Não fechamos o Login antes: quem decide é o Menu
         MenuOpcoesDialog dialog = new MenuOpcoesDialog((JFrame) getOwner(), rede, usuario);
         dialog.setLocationRelativeTo(getOwner());
         dialog.setVisible(true);
 
-        // pega o texto final para mostrar na tela principal
+        // Após o Menu fechar, capturamos as decisões
         resultadoAcao = dialog.getResultadoAcao();
+        abrirPainelPrincipal = dialog.isAbrirPainelPrincipal();
+
+        // Agora sim, encerramos o Login
+        dispose();
     }
 
     public String getResultadoAcao() {
         return resultadoAcao;
+    }
+
+    public boolean isAbrirPainelPrincipal() {
+        return abrirPainelPrincipal;
     }
 }

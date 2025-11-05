@@ -17,18 +17,15 @@ public class AppInterativo extends JFrame {
         setSize(800, 600);
         setLayout(new BorderLayout(10, 10));
 
-        // === REMOVIDO o painel com botão "INICIAR/LOGIN" ===
-        // Agora não existe tela inicial. Vamos direto para o Login.
-
-        // --- Painel de Visualização ---
+        // --- Painel de Visualização (esquerda: grafo | direita: resultados) ---
         JPanel painelVisualizacao = criarPainelVisualizacao();
         add(painelVisualizacao, BorderLayout.CENTER);
 
         atualizarExibicaoGrafo();
 
         setLocationRelativeTo(null);
-        // IMPORTANTE: não chamamos setVisible(true) aqui.
-        // A janela só aparece DEPOIS do login (ver método iniciar()).
+        // IMPORTANTE: não tornamos visível aqui.
+        // A janela só aparece DEPOIS do login/menu optar por abrir o painel.
     }
 
     private JPanel criarPainelVisualizacao() {
@@ -50,34 +47,36 @@ public class AppInterativo extends JFrame {
         return painel;
     }
 
-    /**
-     * Chame este método para iniciar o app:
-     * 1) Abre o Login (modal)
-     * 2) Atualiza textos
-     * 3) Mostra a janela principal
-     */
+    /** Ponto de partida do app. */
     public void iniciar() {
+        // Se quiser popular com usuários fixos, descomente:
         UsuariosIniciais.popular(rede);
-        exibirTelaLogin();          // abre o Login primeiro (sem tela inicial)
-        setVisible(true);           // só depois mostra a janela principal
+
+        exibirTelaLogin(); // não abre a janela ainda; só abre se o menu mandar
     }
 
-    // --- Lógica de Navegação Principal ---
+    // --- Fluxo de navegação: Login -> (Menu) -> talvez abrir painel ---
     private void exibirTelaLogin() {
-        // LoginDialog deve ser um JDialog modal: new LoginDialog(Frame owner, GrafoSocial rede)
         LoginDialog dialog = new LoginDialog(this, rede);
         dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true); // bloqueia até fechar (se modal)
+        dialog.setVisible(true); // bloqueia até o login+menu fechar
 
-        // Após o diálogo fechar, o resultado é capturado e as telas são atualizadas
-        atualizarExibicaoGrafo();
-        String resultado = dialog.getResultadoAcao();
-        if (resultado != null && !resultado.isEmpty()) {
-            areaTextoResultados.setText(resultado);
+        if (dialog.isAbrirPainelPrincipal()) {
+            atualizarExibicaoGrafo();
+            String resultado = dialog.getResultadoAcao();
+            if (resultado != null && !resultado.isEmpty()) {
+                areaTextoResultados.setText(resultado);
+            }
+            setLocationRelativeTo(null);
+            setVisible(true); // só agora mostramos a janela principal
+        } else {
+            // Sessão encerrada sem abrir painel
+            dispose();
+            System.exit(0);
         }
     }
 
-    // Método para ser chamado publicamente pelos diálogos para atualizar o resultado
+    // Método para diálogos atualizarem o painel principal, se necessário
     public void setResultado(String resultado) {
         areaTextoResultados.setText(resultado);
         atualizarExibicaoGrafo();
@@ -99,7 +98,7 @@ public class AppInterativo extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             AppInterativo app = new AppInterativo();
-            app.iniciar(); // -> abre Login primeiro e só depois exibe a janela
+            app.iniciar();
         });
     }
 }
