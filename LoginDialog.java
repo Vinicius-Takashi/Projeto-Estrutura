@@ -6,6 +6,7 @@ public class LoginDialog extends JDialog {
     private GrafoSocial rede;
     private String resultadoAcao = "[Nenhuma ação realizada]";
     private boolean abrirPainelPrincipal = false; // <- MENU decide se abre o painel
+    private String ultimoUsuarioLogado = null;     // <- NOVO: quem está logado
 
     public LoginDialog(JFrame owner, GrafoSocial rede) {
         super(owner, "Tela 1: Login / Seleção de Usuário", true);
@@ -37,6 +38,7 @@ public class LoginDialog extends JDialog {
             String n = nome.trim();
             rede.adicionarUsuario(n);
             resultadoAcao = "[Ação]: Usuário '" + n + "' adicionado ao grafo.";
+            ultimoUsuarioLogado = n;              // <<< NOVO: guarda logado
             chamarTelaOpcoes(n);
         } else {
             resultadoAcao = "[Ação Cancelada]";
@@ -64,6 +66,7 @@ public class LoginDialog extends JDialog {
         );
 
         if (usuarioAtivo != null) {
+            ultimoUsuarioLogado = usuarioAtivo;   // <<< NOVO: guarda logado
             chamarTelaOpcoes(usuarioAtivo);
         } else {
             resultadoAcao = "[Ação Cancelada]";
@@ -94,12 +97,16 @@ public class LoginDialog extends JDialog {
         dispose();
     }
 
-
     public String getResultadoAcao() {
         return resultadoAcao;
     }
 
     public boolean isAbrirPainelPrincipal() {
         return abrirPainelPrincipal;
+    }
+
+    // <<< NOVO: usado pelo AppInterativo para voltar ao menu com o mesmo usuário
+    public String getUltimoUsuarioLogado() {
+        return ultimoUsuarioLogado;
     }
 }

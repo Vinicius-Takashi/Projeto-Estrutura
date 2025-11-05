@@ -7,31 +7,37 @@ public class AppInterativo extends JFrame {
 
     private GrafoSocial rede;
     private JTextArea areaTextoGrafo;
+    private String ultimoUsuarioLogado; // <<< guarda o último usuário
 
     public AppInterativo() {
         super("MAUÁ CONECTA");
 
         this.rede = new GrafoSocial();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 600);
+        setSize(1100, 800);
+        setMinimumSize(new Dimension(900, 600));
         setLayout(new BorderLayout(10, 10));
 
-        // Painel central: só o grafo
+        // --- Área central (somente grafo)
         JPanel painelVisualizacao = criarPainelVisualizacao();
         add(painelVisualizacao, BorderLayout.CENTER);
 
-        atualizarExibicaoGrafo();
+        // --- Botão inferior: voltar ao menu
+        JButton btnVoltar = new JButton("Voltar ao Menu de Opções");
+        btnVoltar.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnVoltar.addActionListener(e -> voltarAoMenu());
+        add(btnVoltar, BorderLayout.SOUTH);
 
         setLocationRelativeTo(null);
-        // não chamamos setVisible aqui — só depois do login/menu
     }
 
     private JPanel criarPainelVisualizacao() {
         JPanel painel = new JPanel(new BorderLayout(10, 10));
 
-        // Apenas exibição do grafo (lista de adjacências)
-        areaTextoGrafo = new JTextArea("Grafo Social:\n[Vazio]");
+        areaTextoGrafo = new JTextArea("MAUÁ CONECTA:");
         areaTextoGrafo.setEditable(false);
+        areaTextoGrafo.setLineWrap(true);
+        areaTextoGrafo.setWrapStyleWord(false);
         areaTextoGrafo.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
         painel.add(new JScrollPane(areaTextoGrafo), BorderLayout.CENTER);
@@ -39,9 +45,8 @@ public class AppInterativo extends JFrame {
     }
 
     public void iniciar() {
-        // Popula antes do login
+        // Popula a rede antes do login
         UsuariosIniciais.popularComConexoes(rede);
-
         exibirTelaLogin();
     }
 
@@ -51,8 +56,10 @@ public class AppInterativo extends JFrame {
         dialog.setVisible(true);
 
         if (dialog.isAbrirPainelPrincipal()) {
+            // guarda o último usuário logado para o botão "Voltar"
+            ultimoUsuarioLogado = dialog.getUltimoUsuarioLogado();
+
             atualizarExibicaoGrafo();
-            setLocationRelativeTo(null);
             setVisible(true);
         } else {
             dispose();
@@ -60,14 +67,41 @@ public class AppInterativo extends JFrame {
         }
     }
 
+    private void voltarAoMenu() {
+        if (ultimoUsuarioLogado != null) {
+            setVisible(false); // esconde a janela do grafo
+            MenuOpcoesDialog menu = new MenuOpcoesDialog(this, rede, ultimoUsuarioLogado);
+            menu.setLocationRelativeTo(this);
+            menu.setVisible(true);
+
+            // Se no menu o usuário decidir abrir o painel novamente:
+            if (menu.isAbrirPainelPrincipal()) {
+                atualizarExibicaoGrafo();
+                setVisible(true);
+            } else if (menu.isTrocarUsuario()) {
+                // volta ao login
+                exibirTelaLogin();
+            } else {
+                dispose();
+            }
+        } else {
+            // fallback caso não haja usuário salvo
+            JOptionPane.showMessageDialog(this,
+                    "Nenhum usuário ativo encontrado. Voltando ao login.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            setVisible(false);
+            exibirTelaLogin();
+        }
+    }
+
     private void atualizarExibicaoGrafo() {
         StringBuilder sb = new StringBuilder();
         sb.append("MAUÁ CONECTA:\n\n");
         if (rede.getListaAdjacencia().isEmpty()) {
-            sb.append("  [Grafo Vazio.]");
+            sb.append("[Grafo vazio]");
         } else {
             for (Map.Entry<String, List<String>> entry : rede.getListaAdjacencia().entrySet()) {
-                sb.append("  ").append(entry.getKey()).append(" -> ").append(entry.getValue()).append("\n");
+                sb.append(entry.getKey()).append(" -> ").append(entry.getValue()).append("\n");
             }
         }
         areaTextoGrafo.setText(sb.toString());
