@@ -27,11 +27,11 @@ public class TelaRecomendacoesDialog extends JDialog {
         Set<String> recomendacoes = rede.recomendarAmigos(usuarioAtivo);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("--- RECOMENDAÇÕES BFS (Distância 2) ---\n");
-        sb.append("Usuário Base: ").append(usuarioAtivo).append("\n\n");
+        sb.append("\t--- RECOMENDAÇÕES ---\n");
+        sb.append("Usuário: ").append(usuarioAtivo).append("\n\n");
 
         if (recomendacoes.isEmpty()) {
-            sb.append("Nenhuma recomendação (Amigo de Amigo) encontrada.");
+            sb.append("Nenhuma recomendação encontrada.");
         } else {
             for (String recomendado : recomendacoes) {
                 sb.append("-> ").append(recomendado).append("\n");

@@ -22,12 +22,12 @@ public class MenuOpcoesDialog extends JDialog {
 
         add(new JLabel("Usuário Logado: " + usuarioAtivo, SwingConstants.CENTER));
 
-        JButton btnAmizade     = new JButton("1. Adicionar Amigo (Tela 3)");
-        JButton btnListar      = new JButton("2. Listar Amigos (Tela 4)");
-        JButton btnRecomendar  = new JButton("3. Ver Recomendações (Tela 5)");
-        JButton btnAbrirPainel = new JButton("Abrir Painel do Grafo");
-        JButton btnTrocar      = new JButton("Trocar usuário (voltar ao login)"); // NOVO
-        JButton btnFechar      = new JButton("Sair (sem abrir painel)");
+        JButton btnAmizade     = new JButton("1. Adicionar Amigo");
+        JButton btnListar      = new JButton("2. Listar Amigos");
+        JButton btnRecomendar  = new JButton("3. Ver Recomendações");
+        JButton btnAbrirPainel = new JButton("Visualização do Grafo");
+        JButton btnTrocar      = new JButton("Trocar usuário"); // NOVO
+        JButton btnFechar      = new JButton("Sair");
 
         btnAmizade.addActionListener(e -> chamarTelaAdicionar());
         btnListar.addActionListener(e -> chamarTelaListar());

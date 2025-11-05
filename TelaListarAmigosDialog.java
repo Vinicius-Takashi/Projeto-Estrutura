@@ -28,11 +28,11 @@ public class TelaListarAmigosDialog extends JDialog {
         List<String> amigosDiretos = rede.getListaAdjacencia().getOrDefault(usuarioAtivo, Collections.emptyList());
 
         StringBuilder sb = new StringBuilder();
-        sb.append("--- AMIGOS DIRETOS (DISTÂNCIA 1) ---\n");
-        sb.append("Usuário Base: ").append(usuarioAtivo).append("\n\n");
+        sb.append("\t--- AMIGOS ---\n");
+        sb.append("Usuário: ").append(usuarioAtivo).append("\n\n");
 
         if (amigosDiretos.isEmpty()) {
-            sb.append("Não há amigos diretos cadastrados.");
+            sb.append("Não há amigos cadastrados.");
         } else {
             for (String amigo : amigosDiretos) {
                 sb.append("-> ").append(amigo).append("\n");

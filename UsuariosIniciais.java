@@ -4,61 +4,20 @@ import java.util.Set;
 public final class UsuariosIniciais {
 
     public static final String[] NOMES = {
-            "Joao Oliveira Lima de Queiroz Alves",
-            "Joao Victor Pessoa de Lima Dos Anjos",
-            "Guilherme Gouvea Said Antonio",
-            "Vinicius Eloy Lopes de Oliveira Araujo",
-            "Vinicius da Silva Azevedo",
-            "Gabriel Barrochelo",
-            "Pedro Wilian Palumbo Bevilacqua",
             "Pedro Kuba Bloise",
             "Luigi Lauand Botto",
-            "Lucas Mammoccio Gomes Martins Calcada",
-            "Matheus Antonio da Luz Cardoso",
+            "Robson Calvetti",
             "Gabriel Coutinho Cavalini",
-            "Luigi de Menezes Collesi",
             "Arthur Silva Correia",
-            "Felipe Fazio da Costa",
             "Diogo Musso Coutinho",
-            "Enzo Manzoni Cunha",
-            "Joaquim Anderlini Alves da Cunha",
-            "Enzo Oliveira D´Onofrio",
-            "Rafaella Bataglia Dallovo",
-            "Gustavo Schmid Dividino",
-            "Mark Malpighi Downey",
-            "Leandro Meneghetti Fabre",
-            "Henrique de Souza Gandra",
             "Gustavo Alves Gomes",
             "Enzo Medeiros Grando",
-            "Fernando Godoi Grinevicius",
             "Ilan Hameiry",
-            "Rodrigo Yassuhide Higa",
             "Leonardo Luiz Seixas Iorio",
             "Alan Martins Leandro",
-            "Jonas Fernando da Silva Eboli Machado",
-            "Luca Lopes Martinho",
-            "Eduardo Martelli Marzagao",
-            "Thiago Espigado Miras",
             "Vinicius Takashi Nakatsui",
-            "Bruno Ferreira Nishiya",
-            "Diego Mourao Oliveira",
             "Enzo Pistori Fontenele de Oliveira",
-            "Leonardo Souza Olivieri",
             "Gustavo Henrique Rivero Pasqualin",
-            "Felipe Kolanian Pasquini",
-            "Guilherme de Santana Pinto",
-            "Thiago Benelli Pizzolato",
-            "Maria Luiza Bogossian Remaili",
-            "Ruth Ramos Romeu",
-            "Arthur Gama Ruiz",
-            "Guilherme Gonsales de sa",
-            "Gabriel Fernandes Sabino",
-            "Caio Silva Almeida Santos",
-            "Eduardo Dislich Dos Santos",
-            "Joao Vitor Morimoto Sesma",
-            "Sarah Mascarese de Souza",
-            "Gabriel Giardino Sprotte",
-            "Livia Naomi Ueno",
             "Gustavo Henrique Lamberti Widonsck"
     };
 
@@ -76,5 +35,46 @@ public final class UsuariosIniciais {
         }
     }
 
-    private UsuariosIniciais() {} // utilitário
+    /**
+     * Popula os usuários E cria algumas amizades pré-definidas.
+     * Chame este método no start do app.
+     */
+    public static void popularComConexoes(GrafoSocial rede) {
+        popular(rede);
+
+        // --- Comunidade A ---
+        link(rede, "Enzo Medeiros Grando", "Alan Martins Leandro");
+        link(rede, "Enzo Medeiros Grando", "Vinicius Takashi Nakatsui");
+        link(rede, "Enzo Medeiros Grando", "Gustavo Henrique Lamberti Widonsck");
+        link(rede, "Enzo Medeiros Grando", "Gustavo Alves Gomes");
+        link(rede, "Ilan Hameiry", "Enzo Medeiros Grando");
+        // --- Comunidade B ---
+        link(rede, "Diogo Musso Coutinho", "Leonardo Luiz Seixas Iorio");
+        link(rede, "Diogo Musso Coutinho", "Gabriel Coutinho Cavalini");
+        link(rede, "Diogo Musso Coutinho", "Gustavo Henrique Rivero Pasqualin");
+        // --- Comunidade C ---
+        link(rede, "Luigi Lauand Botto", "Enzo Pistori Fontenele de Oliveira");
+        link(rede, "Luigi Lauand Botto", "Pedro Kuba Bloise");
+        link(rede, "Luigi Lauand Botto", "Arthur Silva Correia");
+        // --- Pontes entre comunidades (para o BFS brilhar) ---
+        link(rede, "Gustavo Alves Gomes", "Diogo Musso Coutinho");                 // A ↔ B
+        link(rede, "Enzo Medeiros Grando", "Luigi Lauand Botto");                      // B ↔ C
+        link(rede, "Robson Calvetti", "Enzo Medeiros Grando");  // B ↔ D
+        link(rede, "Robson Calvetti", "Luigi Lauand Botto");           // A ↔ D
+    }
+
+    /** Adiciona amizade se ambos existirem (evita NPE/casos de nome removido). */
+    private static void link(GrafoSocial rede, String a, String b) {
+        if (existe(rede, a) && existe(rede, b) && !a.equals(b)) {
+            rede.adicionarAmizade(a, b);
+        }
+    }
+
+    /** Verifica existência do usuário na rede. */
+    private static boolean existe(GrafoSocial rede, String nome) {
+        return rede.getListaAdjacencia() != null
+                && rede.getListaAdjacencia().containsKey(nome);
+    }
+
+    private UsuariosIniciais() {}
 }
