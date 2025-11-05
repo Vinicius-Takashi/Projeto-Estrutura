@@ -73,18 +73,27 @@ public class LoginDialog extends JDialog {
 
     /** Abre o Menu (fica no loop lá dentro) e só então decide se abre o painel principal. */
     private void chamarTelaOpcoes(String usuario) {
-        // Não fechamos o Login antes: quem decide é o Menu
+        // Abre o menu e decide o próximo passo
         MenuOpcoesDialog dialog = new MenuOpcoesDialog((JFrame) getOwner(), rede, usuario);
         dialog.setLocationRelativeTo(getOwner());
         dialog.setVisible(true);
 
-        // Após o Menu fechar, capturamos as decisões
         resultadoAcao = dialog.getResultadoAcao();
+
+        if (dialog.isTrocarUsuario()) {
+            // Volta para a tela de login sem fechar o LoginDialog:
+            // o usuário poderá clicar em "Selecionar Usuário" ou "Adicionar".
+            // Apenas retornamos deste método.
+            return;
+        }
+
+        // Caso contrário, respeitamos a decisão de abrir (ou não) o painel principal
         abrirPainelPrincipal = dialog.isAbrirPainelPrincipal();
 
-        // Agora sim, encerramos o Login
+        // Encerramos o LoginDialog; o AppInterativo decide abrir a janela principal ou sair
         dispose();
     }
+
 
     public String getResultadoAcao() {
         return resultadoAcao;
