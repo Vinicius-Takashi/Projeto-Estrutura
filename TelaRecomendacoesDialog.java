@@ -1,46 +1,59 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.Set;
 
 public class TelaRecomendacoesDialog extends JDialog {
-    
-    private String usuarioAtivo;
+
+    private final String usuarioAtivo;
     private String resultadoAcao;
 
     public TelaRecomendacoesDialog(JFrame owner, GrafoSocial rede, String usuarioAtivo) {
         super(owner, "Tela 5: Recomendações para " + usuarioAtivo, true);
         this.usuarioAtivo = usuarioAtivo;
-        
-        setSize(400, 400);
+
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-        setLocationRelativeTo(owner);
-        
-        // --- Executa o Algoritmo BFS ---
+        setResizable(false);
+
+        // ESC fecha o diálogo (qualidade de vida)
+        getRootPane().registerKeyboardAction(
+                e -> dispose(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW
+        );
+
+        // --- Executa o Algoritmo de Recomendação (BFS distância 2) ---
         Set<String> recomendacoes = rede.recomendarAmigos(usuarioAtivo);
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append("--- RECOMENDAÇÕES BFS (Distância 2) ---\n");
         sb.append("Usuário Base: ").append(usuarioAtivo).append("\n\n");
-        
+
         if (recomendacoes.isEmpty()) {
             sb.append("Nenhuma recomendação (Amigo de Amigo) encontrada.");
         } else {
             for (String recomendado : recomendacoes) {
-                sb.append("** RECOMENDAR ** -> ").append(recomendado).append("\n");
+                sb.append("-> ").append(recomendado).append("\n");
             }
         }
-        
+
         JTextArea areaLista = new JTextArea(sb.toString());
         areaLista.setEditable(false);
-        areaLista.setFont(new Font("Monospaced", Font.BOLD, 14));
-        areaLista.setForeground(new Color(150, 0, 150)); // Cor de destaque para o BFS
+        areaLista.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        areaLista.setForeground(new Color(150, 0, 150)); // destaque para recomendações
+        areaLista.setMargin(new Insets(6, 10, 6, 10));
+
         add(new JScrollPane(areaLista), BorderLayout.CENTER);
-        
-        JButton btnOK = new JButton("Voltar");
+
+        JButton btnOK = new JButton("Fechar");
         btnOK.addActionListener(e -> dispose());
         add(btnOK, BorderLayout.SOUTH);
-        
+
         resultadoAcao = sb.toString();
+
+        pack();
+        setLocationRelativeTo(owner);
     }
 
     public String getResultadoAcao() {
