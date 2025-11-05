@@ -14,6 +14,7 @@ public class ResultadosGUI extends JFrame {
     private JComponent abaGraus;
     private JComponent abaCaminhoCurto;
     private JComponent abaLigacoes;
+    private JComponent abaVisualizacao;
     
     // Elementos da Aba de Construção
     private JTextField txtVertice;
@@ -56,11 +57,13 @@ public class ResultadosGUI extends JFrame {
         abaGraus = criarAbaGraus(null, null);
         abaCaminhoCurto = criarAbaCaminhoMaisCurto();
         abaLigacoes = criarAbaLigacoes();
+        abaVisualizacao = criarAbaVisualizacao();
         
         // Adiciona as abas
         tabbedPane.addTab("Análise das proteínas essenciais", abaGraus);
         tabbedPane.addTab("Descobrir a via mais eficiente", abaCaminhoCurto);
         tabbedPane.addTab("Interações das proteínas", abaLigacoes);
+        tabbedPane.addTab("Visualização da Rede", abaVisualizacao);
     }
     
     /**
@@ -80,14 +83,17 @@ public class ResultadosGUI extends JFrame {
         // 2. Remove Abas Antigas (para garantir que as novas entrem)
         tabbedPane.remove(abaGraus);
         tabbedPane.remove(abaLigacoes);
+        tabbedPane.remove(abaVisualizacao);
         
         // 3. Cria/Atualiza Abas com Resultados
         abaGraus = criarAbaGraus(graus, hubs);
         abaLigacoes = criarAbaLigacoes();
+        abaVisualizacao = criarAbaVisualizacao();
 
         // 4. Adiciona as Abas Atualizadas (com os nomes sem números)
         tabbedPane.addTab("Análise dos Graus", abaGraus);
         tabbedPane.addTab("Ligações (Adjacências)", abaLigacoes);
+        tabbedPane.addTab("Visualização da Rede", abaVisualizacao);
         
         // Mover a aba 1 e 3 para a posição correta, pois a 2 é fixa
         // O índice da aba de Caminho Mais Curto (BFS) é 2.
@@ -220,6 +226,12 @@ public class ResultadosGUI extends JFrame {
         
         return panel;
     }
+    private JComponent criarAbaVisualizacao() {
+    // Cria uma nova instância do painel de desenho
+    GraficoRedePanel drawingPanel = new GraficoRedePanel(grafo);
+    // Envolve em um JScrollPane caso o grafo seja muito grande
+    return new JScrollPane(drawingPanel);
+}
     
     private void executarAnaliseCaminhoMaisCurto(ActionEvent event) {
         String inicio = txtCaminhoInicio.getText().trim();
