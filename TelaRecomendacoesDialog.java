@@ -9,7 +9,7 @@ public class TelaRecomendacoesDialog extends JDialog {
     private String resultadoAcao;
 
     public TelaRecomendacoesDialog(JFrame owner, GrafoSocial rede, String usuarioAtivo) {
-        super(owner, "Tela 5: Recomendações para " + usuarioAtivo, true);
+        super(owner, "Recomendações para " + usuarioAtivo, true);
         this.usuarioAtivo = usuarioAtivo;
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

@@ -11,7 +11,7 @@ public class TelaAdicionarAmigoDialog extends JDialog {
     private String resultadoAcao = "[Ação Cancelada]";
 
     public TelaAdicionarAmigoDialog(JFrame owner, GrafoSocial rede, String usuarioAtivo) {
-        super(owner, "Tela 3: Adicionar Amigo a " + usuarioAtivo, true);
+        super(owner, "Adicionar amigo", true);
         this.rede = rede;
         this.usuarioAtivo = usuarioAtivo;
 

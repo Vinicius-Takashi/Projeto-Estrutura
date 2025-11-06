@@ -10,7 +10,7 @@ public class MenuOpcoesDialog extends JDialog {
     private boolean trocarUsuario = false;        // voltar ao login?
 
     public MenuOpcoesDialog(JFrame owner, GrafoSocial rede, String usuarioAtivo) {
-        super(owner, "Tela 2: Opções do Usuário - " + usuarioAtivo, true);
+        super(owner, "MAUÁ CONECTA ", true);
 
         this.rede = rede;
         this.usuarioAtivo = usuarioAtivo;
@@ -20,14 +20,14 @@ public class MenuOpcoesDialog extends JDialog {
         setLayout(new GridLayout(7, 1, 10, 10));
         setLocationRelativeTo(owner);
 
-        add(new JLabel("Usuário Logado: " + usuarioAtivo, SwingConstants.CENTER));
+        add(new JLabel("Usuário logado: " + usuarioAtivo, SwingConstants.CENTER));
 
-        JButton btnAmizade     = new JButton("1. Adicionar Amigo");
-        JButton btnListar      = new JButton("2. Listar Amigos");
-        JButton btnRecomendar  = new JButton("3. Ver Recomendações");
-        JButton btnAbrirPainel = new JButton("Visualização do Grafo");
-        JButton btnTrocar      = new JButton("Trocar usuário"); // NOVO
-        JButton btnFechar      = new JButton("Sair");
+        JButton btnAmizade     = new JButton(" Adicionar amigo ");
+        JButton btnListar      = new JButton(" Listar amigos ");
+        JButton btnRecomendar  = new JButton(" Ver recomendações ");
+        JButton btnAbrirPainel = new JButton(" Visualização do grafo ");
+        JButton btnTrocar      = new JButton(" Trocar usuário "); // NOVO
+        JButton btnFechar      = new JButton(" Sair ");
 
         btnAmizade.addActionListener(e -> chamarTelaAdicionar());
         btnListar.addActionListener(e -> chamarTelaListar());

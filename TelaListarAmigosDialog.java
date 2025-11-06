@@ -10,7 +10,7 @@ public class TelaListarAmigosDialog extends JDialog {
     private String resultadoAcao;
 
     public TelaListarAmigosDialog(JFrame owner, GrafoSocial rede, String usuarioAtivo) {
-        super(owner, "Tela 4: Amigos Diretos de " + usuarioAtivo, true);
+        super(owner, "Amigos diretos", true);
         this.usuarioAtivo = usuarioAtivo;
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

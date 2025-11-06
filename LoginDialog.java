@@ -9,7 +9,7 @@ public class LoginDialog extends JDialog {
     private String ultimoUsuarioLogado = null;     // <- NOVO: quem está logado
 
     public LoginDialog(JFrame owner, GrafoSocial rede) {
-        super(owner, "Tela 1: Login / Seleção de Usuário", true);
+        super(owner, "Seleção de Usuário", true);
         this.rede = rede;
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -17,10 +17,10 @@ public class LoginDialog extends JDialog {
         setLayout(new GridLayout(4, 1, 10, 10));
         setLocationRelativeTo(owner);
 
-        add(new JLabel("Bem-vindo ao Simulador de Rede Social!", SwingConstants.CENTER));
+        add(new JLabel("Bem-vindo ao MAUÁ CONECTA", SwingConstants.CENTER));
 
-        JButton btnAdicionar = new JButton("Adicionar Novo Usuário");
-        JButton btnSelecionar = new JButton("Selecionar Usuário Existente");
+        JButton btnAdicionar = new JButton("Adicionar novo usuário");
+        JButton btnSelecionar = new JButton("Selecionar usuário existente");
 
         btnAdicionar.addActionListener(e -> acaoAdicionarUsuario());
         btnSelecionar.addActionListener(e -> acaoSelecionarUsuario());
@@ -57,8 +57,8 @@ public class LoginDialog extends JDialog {
         String[] usuarios = rede.getListaAdjacencia().keySet().toArray(new String[0]);
         String usuarioAtivo = (String) JOptionPane.showInputDialog(
                 this,
-                "Selecione o Usuário para Logar:",
-                "Selecionar Usuário",
+                "Selecione o usuário para logar:",
+                "Selecionar usuário",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 usuarios,

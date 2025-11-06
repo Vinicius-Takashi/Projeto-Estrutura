@@ -23,7 +23,7 @@ public class AppInterativo extends JFrame {
         add(painelVisualizacao, BorderLayout.CENTER);
 
         // --- Botão inferior: voltar ao menu
-        JButton btnVoltar = new JButton("Voltar ao Menu de Opções");
+        JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(new Font("SansSerif", Font.BOLD, 13));
         btnVoltar.addActionListener(e -> voltarAoMenu());
         add(btnVoltar, BorderLayout.SOUTH);
